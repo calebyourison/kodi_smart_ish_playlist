@@ -1,67 +1,38 @@
 # Kodi Smart-Ish Playlist
+
 ---
 
-A quick and dirty add-on for Kodi that builds a playlist based on the criteria provided for the script.
+A quick and dirty add-on for Kodi that builds a random playlist based on the media criteria provided for the script.
 
-Configure it to your needs, then copy/zip the folder into an add-on and install.
+Can be run on demand or configured to run once at startup.
 
-The default addon.xml implements this as a script that can be run on demand.  The optional file will convert the add-on into a service that runs once at startup.
 
-Suggestions for improvement/contributions are welcome.
+## General settings
 
-#### Design
+---
+- "Build At Startup" will generate the playlist upon starting Kodi.
+- "Auto Play" and "Shuffle" to play and shuffle automatically once built.
+- "Current Selections" display JSON data of the currently designated media.
+
+![My plot](menu_images/general.png)
+
+## Movies
+
 ---
 
-Make all of your changes to the default.py file.  In order to function correctly, ensure the titles are exact.
+Select Movies from the list and designate how many should randomly be chosen from that selection.
 
-TV Shows
-```bash
-my_shows = {
-  "Show Title": [
-    10, # Number of episodes to select 
-    True, # Random selection True/False, False will select episodes sequentially
-    ["Episode to Exclude", "Another episode to exclude"] # Episodes to exclude from selection
-    ],
-  
-  "Second Show": [
-    5,
-    True,
-    [None] # Do not exclude any episodes
-    
-  ],
-  ...
-}
-```
+![My plot](menu_images/movies.png)
 
-Movies
+## TV Shows
 
-```bash
-my_movies = [
-  "Movie Title", # Exact title match needed
-  "Second Movie",
-  ...
-]
-```
+---
 
-Variables
+Select TV Shows, number of episodes for each show, and episodes to exclude from each show.
+The menu dialog will request this information for each selected show.
 
-```bash
-number_of_movies_to_select = 5 # Number of movies to randomly select from my_movies
-playlist = 1 # Default playlist id
+![My plot](menu_images/tv_shows.png)
 
-clear_existing_playlist = True # Empty the selected playlist before adding to it, recommended if using the default playlist
-autostart = True # Start playlist once built
-shuffle = True # Shuffle the playlist once played, not applicable if autostart=False
-
-cancel_dialog_visible = True # Display message to cancel the playlist build, helpful if configured as service that runs at start
-cancel_dialog_title = "Building Playlist" 
-cancel_dialog_message = "Initializing..."
-```
-
-Export
-
-The easiest method is to copy the entire script.video.smartishplaylist folder, modify the default.py file, and zip the whole thing. 
-Then it's ready to be installed.
 
 #### Disclaimer
 ---

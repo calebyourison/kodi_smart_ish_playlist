@@ -1,0 +1,61 @@
+# Kodi Media Center language file
+# Addon Name: Kodi Smart Ish Playlist
+# Addon id: service.video.smartishplaylist
+
+msgid ""
+msgstr ""
+
+# General Settings 32000-32020
+msgctxt "#32001"
+msgid "General"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Build At Startup"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Auto Play"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Shuffle"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Current Selections"
+msgstr ""
+
+# TV Show Settings 32021-32040
+msgctxt "#32021"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Show Selection"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Selected TV Shows"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Show Criteria"
+msgstr ""
+
+# Movies Settings 32041-32060
+msgctxt "#32041"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#32042"
+msgid "Movie Selection"
+msgstr ""
+
+msgctxt "#32043"
+msgid "Selected Movies"
+msgstr ""
+
+msgctxt "#32044"
+msgid "Number of Movies"
+msgstr ""
