@@ -33,6 +33,7 @@ The menu dialog will request this information for each selected show.
 
 ![My plot](menu_images/tv_shows.png)
 
+[Download](https://github.com/calebyourison/kodi_smart_ish_playlist/releases/tag/kodi-smart-ish-playlist) and install from zip.
 
 #### Disclaimer
 ---
