@@ -9,21 +9,34 @@
                     <level>0</level>
                     <default>false</default>
                     <control type="toggle"/>
-                    <heading>32002</heading>
                 </setting>
 
                 <setting id="auto_play" type="boolean" label="32003" help="">
                     <level>0</level>
                     <default>false</default>
                     <control type="toggle"/>
-                    <heading>32003</heading>
                 </setting>
 
                 <setting id="shuffle" type="boolean" label="32004" help="">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>
-                    <heading>32004</heading>
+                </setting>
+
+                <setting id="auto_quit" type="boolean" label="32006" help="">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+
+                <setting id="auto_quit_minutes" type="integer" label="32007" help="">
+                    <dependencies>
+	                    <dependency type="visible" setting="auto_quit">true</dependency>
+                    </dependencies>
+                    <level>0</level>
+	                <default>60</default>
+	                <control type="edit" format="integer">
+	                </control>
                 </setting>
 
                 <setting id="selection_info" type="action" label="32005" help="">
@@ -62,7 +75,6 @@
                         <allowempty>true</allowempty>
                     </constraints>
                     <control type="edit" format="string">
-                        <heading>32042</heading>
                     </control>
                 </setting>
 
@@ -70,7 +82,6 @@
                     <level>0</level>
 	                <default>5</default>
 	                <control type="edit" format="integer">
-		                <heading>32044</heading>
 	                </control>
                 </setting>
 
@@ -101,7 +112,6 @@
                         <allowempty>true</allowempty>
                     </constraints>
                     <control type="edit" format="string">
-                        <heading>32023</heading>
                     </control>
                 </setting>
 
@@ -113,7 +123,6 @@
                         <allowempty>true</allowempty>
                     </constraints>
                     <control type="edit" format="string">
-                        <heading>32024</heading>
                     </control>
                 </setting>
 

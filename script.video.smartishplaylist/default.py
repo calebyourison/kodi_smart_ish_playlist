@@ -1,11 +1,12 @@
 import sys
+import json
 
 import xbmcaddon
 import xbmcgui
 
 from resources.lib.logger import write_log
 from resources.lib.selections import select_media, display_selections
-from resources.lib.playlist_functions import build_playlist, gather_media_info, start_playlist
+from resources.lib.playlist_functions import build_playlist, gather_media_info, start_playlist, quit_kodi_after
 
 all_args = sys.argv
 
@@ -17,6 +18,7 @@ def build():
 
     autoplay = addon.getSettingBool("auto_play")
     shuffle = addon.getSettingBool("shuffle")
+    auto_quit = addon.getSettingBool("auto_quit")
 
     write_log(f"Building, Autoplay: {autoplay} Shuffle: {shuffle}")
 
@@ -33,6 +35,10 @@ def build():
         if autoplay:
             start_playlist(playlist_id=1, shuffle=shuffle)
             write_log("Playback started")
+
+            if auto_quit:
+                auto_quit_minutes = json.loads(addon.getSetting("auto_quit_minutes"))
+                quit_kodi_after(auto_quit_minutes)
 
     else:
         xbmcgui.Dialog().notification("Stopped", "Playlist build incomplete", xbmcgui.NOTIFICATION_ERROR, 3000)

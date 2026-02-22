@@ -26,6 +26,14 @@ msgctxt "#32005"
 msgid "Current Selections"
 msgstr ""
 
+msgctxt "#32006"
+msgid "Quit After Duration"
+msgstr ""
+
+msgctxt "#32007"
+msgid "    Minutes"
+msgstr ""
+
 # TV Show Settings 32021-32040
 msgctxt "#32021"
 msgid "TV Shows"

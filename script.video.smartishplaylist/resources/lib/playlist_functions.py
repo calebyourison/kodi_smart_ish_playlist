@@ -4,6 +4,7 @@ import xbmcgui
 import json
 import random
 from typing import Literal
+import threading
 
 from resources.lib.queries import list_of_all_tv_shows, list_all_movies, list_of_episodes_by_show_id, kodi_rpc
 from resources.lib.logger import write_log
@@ -172,3 +173,54 @@ def start_playlist(playlist_id: int = 1, shuffle: bool = True) -> None:
     }, return_result=False)
 
 
+def quit_kodi_after(minutes: int) -> None:
+    """Stop playback if applicable and quit kodi after specified number of minutes"""
+
+    def _worker():
+        write_log(f"Kodi will quit in {minutes} minutes")
+
+        total_ms = minutes * 60 * 1000
+        elapsed = 0
+        step = 500
+
+        while elapsed < total_ms and not xbmc.Monitor().abortRequested():
+            # Sleep every half second
+            xbmc.sleep(step)
+            elapsed += step
+
+        if xbmc.Monitor().abortRequested():
+            return
+
+        data = kodi_rpc({
+            "jsonrpc": "2.0",
+            "method": "Player.GetActivePlayers",
+            "id": 10
+        })
+
+        player_id = None
+        if data and isinstance(data.get("result"), list):
+            for player in data["result"]:
+                if player.get("type") == "video":
+                    player_id = player.get("playerid")
+                    break
+
+        # Stop playback if applicable
+        if player_id is not None:
+            write_log("Stopping video playback before quit")
+            kodi_rpc({
+                "jsonrpc": "2.0",
+                "method": "Player.Stop",
+                "params": {"playerid": player_id},
+                "id": 11
+            }, return_result=False)
+
+            xbmc.sleep(1000)
+
+        write_log("Quitting Kodi")
+        kodi_rpc({
+            "jsonrpc": "2.0",
+            "method": "Application.Quit",
+            "id": 12
+        }, return_result=False)
+
+    threading.Thread(target=_worker, daemon=True).start()

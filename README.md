@@ -2,7 +2,10 @@
 
 ---
 
-A quick and dirty add-on for Kodi that builds a random playlist based on the media criteria provided for the script.
+A quick and dirty add-on for Kodi that builds a random playlist based on the media criteria provided for the script.  
+Currently, Movies and TV Shows are supported.  
+The playlist will include an arbitrary number of randomly selected movies from the given subset.
+The playlist will also include randomly selected episodes from each designated show while allowing for exclusions of specific episodes.
 
 Can be run on demand or configured to run once at startup.
 
@@ -12,6 +15,7 @@ Can be run on demand or configured to run once at startup.
 ---
 - "Build At Startup" will generate the playlist upon starting Kodi.
 - "Auto Play" and "Shuffle" to play and shuffle automatically once built.
+- "Quit After Duration" will exit Kodi after the number of specified minutes.  Applicable only if Auto Play is enabled. For more advanced timers and settings, it's recommended to use [timers](https://github.com/Heckie75/kodi-addon-timers).
 - "Current Selections" display JSON data of the currently designated media.
 
 ![My plot](menu_images/general.png)
