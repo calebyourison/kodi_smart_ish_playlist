@@ -2,12 +2,14 @@
 
 ---
 
-A quick and dirty add-on for Kodi that builds a random playlist based on the media criteria provided for the script.  
-Currently, Movies and TV Shows are supported.  
+A quick and dirty add-on for Kodi that builds a random playlist based on the media criteria provided..  
+Currently, Movies and TV Shows are supported.
 The playlist will include an arbitrary number of randomly selected movies from the given subset.
 The playlist will also include randomly selected episodes from each designated show while allowing for exclusions of specific episodes.
 
 Can be run on demand or configured to run once at startup.
+
+[Download](https://github.com/calebyourison/kodi_smart_ish_playlist/releases/tag/kodi-smart-ish-playlist) and install from zip.
 
 
 ## General settings
@@ -15,29 +17,27 @@ Can be run on demand or configured to run once at startup.
 ---
 - "Build At Startup" will generate the playlist upon starting Kodi.
 - "Auto Play" and "Shuffle" to play and shuffle automatically once built.
-- "Quit After Duration" will exit Kodi after the number of specified minutes.  Applicable only if Auto Play is enabled. For more advanced timers and settings, it's recommended to use [timers](https://github.com/Heckie75/kodi-addon-timers).
-- "Current Selections" display JSON data of the currently designated media.
+- "Quit After Duration" will exit Kodi after the specified number of minutes.  Applicable only if Auto Play is enabled. For more advanced timers and settings, it's recommended to use [timers](https://github.com/Heckie75/kodi-addon-timers).
 
-![My plot](menu_images/general.png)
+![My plot](script.video.smartishplaylist/resources/media/general.png)
 
 ## Movies
 
 ---
 
-Select Movies from the list and designate how many should randomly be chosen from that selection.
+Select Movies from the library and designate how many should randomly be chosen from that selection.
 
-![My plot](menu_images/movies.png)
+![My plot](script.video.smartishplaylist/resources/media/movies.png)
 
 ## TV Shows
 
 ---
+- "Shows Selection" allows the selection of desired shows from the library.
+- "Configure Shows" is optional. It allows configuration specific to each show. Currently, one can select the number of episodes as well as episodes to exclude.
+- "Default Number of Episodes" will take effect for any shows that were selected, but not configured individually.
 
-Select TV Shows, number of episodes for each show, and episodes to exclude from each show.
-The menu dialog will request this information for each selected show.
+![My plot](script.video.smartishplaylist/resources/media/tv_shows.png)
 
-![My plot](menu_images/tv_shows.png)
-
-[Download](https://github.com/calebyourison/kodi_smart_ish_playlist/releases/tag/kodi-smart-ish-playlist) and install from zip.
 
 #### Disclaimer
 ---

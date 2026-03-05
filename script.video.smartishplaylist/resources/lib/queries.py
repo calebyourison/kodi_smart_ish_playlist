@@ -9,11 +9,11 @@ from resources.lib.logger import write_log
 
 def kodi_rpc(params:dict, return_result:bool=True) -> Any|None:
     """Return a JSON object from rpc call"""
-    method = params.get("method", "UNKNOWN")
+    method:str = params.get("method", "UNKNOWN")
     start = time.time()
 
     try:
-        response = xbmc.executeJSONRPC(json.dumps(params))
+        response:str = xbmc.executeJSONRPC(json.dumps(params))
         elapsed = time.time() - start
 
         write_log(f"RPC {method} took {elapsed:.3f}s")
@@ -21,7 +21,7 @@ def kodi_rpc(params:dict, return_result:bool=True) -> Any|None:
         if not return_result:
             return None
 
-        data = json.loads(response)
+        data:dict = json.loads(response)
 
         if "error" in data:
             write_log(f"RPC ERROR in {method}: {data['error']}", level=xbmc.LOGERROR)
@@ -38,7 +38,7 @@ def list_all_movies() -> list[dict]:
     """Return a list of all movies with their various attributes"""
     write_log(message="Querying all Movies")
 
-    movies_payload = {
+    movies_payload:dict = {
         "jsonrpc": "2.0",
         "method": "VideoLibrary.GetMovies",
         "params": {
@@ -47,7 +47,7 @@ def list_all_movies() -> list[dict]:
         "id": 1
     }
 
-    movies_list = kodi_rpc(movies_payload, return_result=True).get('result', {}).get('movies', [])
+    movies_list:list[dict] = kodi_rpc(movies_payload, return_result=True).get('result', {}).get('movies', [])
 
     write_log(f"All Movies info: {movies_list}")
 
@@ -58,7 +58,7 @@ def list_of_all_tv_shows() -> list[dict]:
     """Return a list of all TV shows with their various attributes"""
     write_log("Querying all TV Shows")
 
-    tv_shows_payload = {
+    tv_shows_payload:dict = {
         "jsonrpc": "2.0",
         "method": "VideoLibrary.GetTVShows",
         "id": 1,
@@ -69,19 +69,18 @@ def list_of_all_tv_shows() -> list[dict]:
         },
     }
 
-    tv_show_list = kodi_rpc(tv_shows_payload).get('result', {}).get('tvshows', [])
+    tv_show_list:list[dict] = kodi_rpc(tv_shows_payload).get('result', {}).get('tvshows', [])
 
     write_log(f"TV Shows info: {tv_show_list}")
 
     return tv_show_list
 
 
-
 def list_of_episodes_by_show_id(show_id: int, number:int|None=None) -> list[dict]:
     """Return a list of episodes for a given show id and various episode attributes"""
     write_log(f"Querying all episodes for show_id: {show_id}")
 
-    episodes_payload = {
+    episodes_payload:dict = {
         "jsonrpc": "2.0",
         "method": "VideoLibrary.GetEpisodes",
         "id": 1,
@@ -97,7 +96,7 @@ def list_of_episodes_by_show_id(show_id: int, number:int|None=None) -> list[dict
         episodes_payload["params"]["sort"] = {"method": "random"}
         episodes_payload["params"]["limits"] = {"start": 0, "end": number}
 
-    episodes_list = kodi_rpc(episodes_payload).get('result', {}).get('episodes', [])
+    episodes_list: list[dict] = kodi_rpc(episodes_payload).get('result', {}).get('episodes', [])
     write_log(f"Episodes list: {episodes_list}")
 
     return episodes_list

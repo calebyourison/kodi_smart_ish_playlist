@@ -23,7 +23,7 @@ msgid "Shuffle"
 msgstr ""
 
 msgctxt "#32005"
-msgid "Current Selections"
+msgid ""
 msgstr ""
 
 msgctxt "#32006"
@@ -48,7 +48,11 @@ msgid "Selected TV Shows"
 msgstr ""
 
 msgctxt "#32024"
-msgid "Show Criteria"
+msgid "Default Number of Episodes"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Configure Shows"
 msgstr ""
 
 # Movies Settings 32041-32060

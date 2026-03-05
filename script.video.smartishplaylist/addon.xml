@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.video.smartishplaylist"
        name="Smart-Ish Playlist"
-       version="0.2.1"
+       version="0.3.0"
        provider-name="Caleb Yourison">
 
     <requires>
@@ -17,8 +17,14 @@
            start="startup" />
 
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Smart-ish Playlist</summary>
+        <summary lang="en_GB">Smart-ish Playlist</summary>
         <description lang="en">Mimic smart list behavior with mixed media</description>
         <platform>all</platform>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <screenshot>resources/media/general.png</screenshot>
+            <screenshot>resources/media/movies.png</screenshot>
+            <screenshot>resources/media/tv_shows.png</screenshot>
+        </assets>
     </extension>
 </addon>

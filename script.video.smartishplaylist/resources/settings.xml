@@ -39,18 +39,6 @@
 	                </control>
                 </setting>
 
-                <setting id="selection_info" type="action" label="32005" help="">
-	                <level>0</level>
-	                <default/>
-	                <constraints>
-		            <allowempty>true</allowempty>
-	                </constraints>
-	                <control type="button" format="action">
-                        <data>RunScript(script.video.smartishplaylist,selection_info)</data>
-	                </control>
-                </setting>
-
-
 			</group>
 		</category>
 
@@ -103,27 +91,22 @@
 	                </control>
                 </setting>
 
-
-                <setting id="selected_tvshow" type="string" label="32023" help="">
-                    <visible>false</visible>
-                    <level>0</level>
-                    <default/>
-                    <constraints>
-                        <allowempty>true</allowempty>
-                    </constraints>
-                    <control type="edit" format="string">
-                    </control>
+                <setting id="configure_shows" type="action" label="32025" help="">
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		            <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="button" format="action">
+                        <data>RunScript(script.video.smartishplaylist,configure_shows)</data>
+	                </control>
                 </setting>
 
-                <setting id="defined_show_criteria" type="string" label="32024" help="">
-                    <visible>false</visible>
+                <setting id="default_number_of_episodes" type="integer" label="32024" help="">
                     <level>0</level>
-                    <default/>
-                    <constraints>
-                        <allowempty>true</allowempty>
-                    </constraints>
-                    <control type="edit" format="string">
-                    </control>
+	                <default>5</default>
+	                <control type="edit" format="integer">
+	                </control>
                 </setting>
 
             </group>
