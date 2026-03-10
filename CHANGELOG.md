@@ -1,3 +1,9 @@
+#### 0.3.1
+
+---
+- Added options to clear selections for all Movies and TV Shows as well as individual Shows
+- Added help text
+
 #### 0.3.0
 
 ---

@@ -4,7 +4,6 @@ import xbmcaddon
 addon = xbmcaddon.Addon()
 
 if addon.getSettingBool("build_at_startup"):
-
     monitor = xbmc.Monitor()
 
     while not monitor.waitForAbort(0.5):

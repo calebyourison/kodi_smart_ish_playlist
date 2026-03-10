@@ -5,31 +5,37 @@
         <category id="general" label="32001" help="">
             <group id="1" label="">
 
-                <setting id="build_at_startup" type="boolean" label="32002" help="">
+                <setting id="build_at_startup" type="boolean" label="32002" help="32003">
                     <level>0</level>
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
 
-                <setting id="auto_play" type="boolean" label="32003" help="">
+                <setting id="auto_play" type="boolean" label="32004" help="32005">
                     <level>0</level>
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
 
-                <setting id="shuffle" type="boolean" label="32004" help="">
+                <setting id="shuffle" type="boolean" label="32006" help="32007">
+                    <dependencies>
+	                    <dependency type="visible" setting="auto_play">true</dependency>
+                    </dependencies>
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
 
-                <setting id="auto_quit" type="boolean" label="32006" help="">
+                <setting id="auto_quit" type="boolean" label="32008" help="32009">
+                    <dependencies>
+	                    <dependency type="visible" setting="auto_play">true</dependency>
+                    </dependencies>
                     <level>0</level>
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
 
-                <setting id="auto_quit_minutes" type="integer" label="32007" help="">
+                <setting id="auto_quit_minutes" type="integer" label="32010" help="32011">
                     <dependencies>
 	                    <dependency type="visible" setting="auto_quit">true</dependency>
                     </dependencies>
@@ -39,12 +45,24 @@
 	                </control>
                 </setting>
 
+                <setting id="review_selections" type="action" label="32012" help="32013">
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		            <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="button" format="action">
+                        <data>RunScript(script.video.smartishplaylist,review_selections)</data>
+	                </control>
+                </setting>
+
 			</group>
 		</category>
 
-        <category id="movies" label="32041" help="">
+        <category id="movies" label="32051" help="">
             <group id="1" label="">
-                <setting id="movie_selection" type="action" label="32042" help="">
+
+                <setting id="movie_selection" type="action" label="32052" help="32053">
 	                <level>0</level>
 	                <default/>
 	                <constraints>
@@ -55,21 +73,21 @@
 	                </control>
                 </setting>
 
-                <setting id="selected_movie" type="string" label="32043" help="">
-                    <visible>false</visible>
-                    <level>0</level>
-                    <default/>
-                    <constraints>
-                        <allowempty>true</allowempty>
-                    </constraints>
-                    <control type="edit" format="string">
-                    </control>
-                </setting>
-
-                <setting id="number_of_movies" type="integer" label="32044" help="">
+                <setting id="number_of_movies" type="integer" label="32054" help="32055">
                     <level>0</level>
 	                <default>5</default>
 	                <control type="edit" format="integer">
+	                </control>
+                </setting>
+
+                <setting id="clear_movie_selection" type="action" label="32056" help="32057">
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		            <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="button" format="action">
+                        <data>RunScript(script.video.smartishplaylist,clear_movies)</data>
 	                </control>
                 </setting>
 
@@ -77,10 +95,10 @@
 
         </category>
 
-        <category id="tv_shows" label="32021" help="">
+        <category id="tv_shows" label="32101" help="">
             <group id="1" label="">
 
-                <setting id="show_selection" type="action" label="32022" help="">
+                <setting id="show_selection" type="action" label="32102" help="32103">
 	                <level>0</level>
 	                <default/>
 	                <constraints>
@@ -91,7 +109,7 @@
 	                </control>
                 </setting>
 
-                <setting id="configure_shows" type="action" label="32025" help="">
+                <setting id="configure_shows" type="action" label="32104" help="32105">
 	                <level>0</level>
 	                <default/>
 	                <constraints>
@@ -102,10 +120,21 @@
 	                </control>
                 </setting>
 
-                <setting id="default_number_of_episodes" type="integer" label="32024" help="">
+                <setting id="default_number_of_episodes" type="integer" label="32106" help="32107">
                     <level>0</level>
 	                <default>5</default>
 	                <control type="edit" format="integer">
+	                </control>
+                </setting>
+
+                <setting id="clear_tvshow_selection" type="action" label="32108" help="32109">
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		            <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="button" format="action">
+                        <data>RunScript(script.video.smartishplaylist,clear_tvshows)</data>
 	                </control>
                 </setting>
 

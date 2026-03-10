@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 
-# General Settings 32000-32020
+
+# General Settings 32001-32050
 msgctxt "#32001"
 msgid "General"
 msgstr ""
@@ -15,59 +16,112 @@ msgid "Build At Startup"
 msgstr ""
 
 msgctxt "#32003"
-msgid "Auto Play"
+msgid "Build a playlist when Kodi first opens"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Shuffle"
+msgid "Auto Play"
 msgstr ""
 
 msgctxt "#32005"
-msgid ""
+msgid "Play immediately once built"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Quit After Duration"
+msgid "    Shuffle"
 msgstr ""
 
 msgctxt "#32007"
-msgid "    Minutes"
+msgid "Shuffle playback order"
 msgstr ""
 
-# TV Show Settings 32021-32040
-msgctxt "#32021"
-msgid "TV Shows"
+msgctxt "#32008"
+msgid "    Quit After Duration"
 msgstr ""
 
-msgctxt "#32022"
-msgid "Show Selection"
+msgctxt "#32009"
+msgid "Quit Kodi after specified length of time"
 msgstr ""
 
-msgctxt "#32023"
-msgid "Selected TV Shows"
+msgctxt "#32010"
+msgid "        Minutes"
 msgstr ""
 
-msgctxt "#32024"
-msgid "Default Number of Episodes"
+msgctxt "#32011"
+msgid "Number of minutes before Kodi quits"
 msgstr ""
 
-msgctxt "#32025"
-msgid "Configure Shows"
+msgctxt "#32012"
+msgid "Review Selections"
 msgstr ""
 
-# Movies Settings 32041-32060
-msgctxt "#32041"
+msgctxt "#32013"
+msgid "Current selections that will be used to a build a playlist"
+msgstr ""
+
+# Movies Settings 32051-32100
+msgctxt "#32051"
 msgid "Movies"
 msgstr ""
 
-msgctxt "#32042"
-msgid "Movie Selection"
-msgstr ""
-
-msgctxt "#32043"
+msgctxt "#32052"
 msgid "Selected Movies"
 msgstr ""
 
-msgctxt "#32044"
+msgctxt "#32053"
+msgid "A random number of titles will be chosen from this list"
+msgstr ""
+
+msgctxt "#32054"
 msgid "Number of Movies"
+msgstr ""
+
+msgctxt "#32055"
+msgid "Number of titles to randomly select"
+msgstr ""
+
+msgctxt "#32056"
+msgid "Clear Movie Selections"
+msgstr ""
+
+msgctxt "#32057"
+msgid "Clear all Movie selections"
+msgstr ""
+
+
+# TV Show Settings 32101-32150
+msgctxt "#32101"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Show Selection"
+msgstr ""
+
+msgctxt "#32103"
+msgid "A random number of episodes will be chosen from each show in this list, default unless configured"
+msgstr ""
+
+msgctxt "#32104"
+msgid "Configure Shows"
+msgstr ""
+
+msgctxt "#32105"
+msgid "Define number of episodes per show and exclude episodes if desired"
+msgstr ""
+
+msgctxt "#32106"
+msgid "Default Number of Episodes"
+msgstr ""
+
+msgctxt "#32107"
+msgid "Default number of episodes to select for unconfigured shows"
+msgstr ""
+
+msgctxt "#32108"
+msgid "Clear TV Show Selections"
+msgstr ""
+
+msgctxt "#32109"
+msgid "Clear all TV Show Selections"
 msgstr ""
