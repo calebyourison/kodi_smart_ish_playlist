@@ -5,6 +5,18 @@
         <category id="general" label="32001" help="">
             <group id="1" label="">
 
+                <setting id="playlist_type" type="integer" label="32014" help="32015">
+                    <level>0</level>
+                    <default>0</default>
+                    	<constraints>
+		                    <options>
+			                    <option label="Manual">0</option>
+			                    <option label="Smart">1</option>
+		                    </options>
+	                    </constraints>
+	                <control type="list" format="string"/>
+                </setting>
+
                 <setting id="build_at_startup" type="boolean" label="32002" help="32003">
                     <level>0</level>
                     <default>false</default>
@@ -59,8 +71,8 @@
 			</group>
 		</category>
 
-        <category id="movies" label="32051" help="">
-            <group id="1" label="">
+        <category id="manual" label="32050" help="">
+            <group id="1" label="32051">
 
                 <setting id="movie_selection" type="action" label="32052" help="32053">
 	                <level>0</level>
@@ -93,10 +105,7 @@
 
             </group>
 
-        </category>
-
-        <category id="tv_shows" label="32101" help="">
-            <group id="1" label="">
+            <group id="2" label="32101">
 
                 <setting id="show_selection" type="action" label="32102" help="32103">
 	                <level>0</level>
@@ -139,7 +148,61 @@
                 </setting>
 
             </group>
+
         </category>
+
+        <category id="smart" label="32151" help="">
+            <group id="1" label="">
+            <setting id="select_smart" type="action" label="32152" help="32153">
+                <level>0</level>
+                <default/>
+                <constraints>
+                    <allowempty>true</allowempty>
+                </constraints>
+                <control type="button" format="action">
+                    <data>RunScript(script.video.smartishplaylist,select_smart)</data>
+                </control>
+            </setting>
+            </group>
+        </category>
+
+       <category id="misc" label="32201" help="">
+           <group id="1" label="">
+
+               <setting id="batch_method" type="integer" label="32202" help="32203">
+                   <level>3</level>
+                    <default>0</default>
+                    	<constraints>
+		                    <options>
+			                    <option label="Size">0</option>
+			                    <option label="Group">1</option>
+		                    </options>
+	                    </constraints>
+	                <control type="list" format="string"/>
+               </setting>
+
+               <setting id="batch_size" type="integer" label="32204" help="32205">
+                   <level>3</level>
+                   <dependencies>
+	                    <dependency type="visible" setting="batch_method">0</dependency>
+                    </dependencies>
+	                <default>25</default>
+	                <control type="edit" format="integer">
+	                </control>
+                </setting>
+
+               <setting id="number_of_batches" type="integer" label="32206" help="32207">
+                   <level>3</level>
+                   <dependencies>
+	                    <dependency type="visible" setting="batch_method">1</dependency>
+                    </dependencies>
+	                <default>10</default>
+	                <control type="edit" format="integer">
+	                </control>
+                </setting>
+
+           </group>
+       </category>
 
 	</section>
 </settings>

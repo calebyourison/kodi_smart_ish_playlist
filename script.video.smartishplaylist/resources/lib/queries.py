@@ -41,7 +41,7 @@ def list_all_movies() -> list[dict]:
     movies_payload: dict = {
         "jsonrpc": "2.0",
         "method": "VideoLibrary.GetMovies",
-        "params": {"properties": ["title"]},
+        "params": {"properties": ["title", "showlink"]},
         "id": 1,
     }
 
@@ -104,3 +104,31 @@ def list_of_episodes_by_show_id(show_id: int, number: int | None = None) -> list
     write_log(f"Episodes list: {episodes_list}")
 
     return episodes_list
+
+
+def find_linked_movies_by_show_title(title:str) -> list[dict]:
+    """Return list of movies whose 'showlink' contains a given title"""
+    all_movies = list_all_movies()
+    linked_movies = [movie for movie in all_movies if title in movie.get("showlink")]
+
+    return linked_movies
+
+
+def single_smart_playlist_info(path:str) -> dict:
+    """Return media items from a single smart playlist"""
+
+    items = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "Files.GetDirectory",
+        "params": {
+        "directory": path,
+        "media": "video"
+        }
+    }
+
+    playlist_items = kodi_rpc(items)
+
+    write_log(f"items: {playlist_items}")
+
+    return playlist_items

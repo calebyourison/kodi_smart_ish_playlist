@@ -7,9 +7,16 @@ import xbmcaddon
 import xbmcgui
 
 from resources.lib.logger import write_log
-from resources.lib.selections import select_media, configure_shows, review_selections
+from resources.lib.selections import (
+    select_media,
+    configure_shows,
+    review_selections,
+    select_smart_playlists,
+    review_smart_playlist_selections
+)
 from resources.lib.playlist_functions import (
     gather_media_info,
+    gather_all_smart_playlist_info,
     quit_kodi_after,
     playlist_builder,
     video_playlist_start,
@@ -23,17 +30,46 @@ write_log(f"all args: {all_args}")
 
 def rpc_worker(progress_queue: Queue, cancel_event: threading.Event) -> None:
     write_log("Begin RPC worker")
+    addon = xbmcaddon.Addon()
+
+    chunk_by_size = True
+
+    playlist_type = int(addon.getSetting("playlist_type"))
+    chunk_type = int(addon.getSetting("batch_method"))
+    if chunk_type == 1:
+        chunk_by_size = False
+
+    chunk_size = int(addon.getSetting("batch_size"))
+    number_of_chunks = int(addon.getSetting("number_of_batches"))
+
+
     monitor = xbmc.Monitor()
-    items = gather_media_info(monitor=monitor)
+    if playlist_type == 0:
+        items = gather_media_info(monitor=monitor)
+    elif playlist_type == 1:
+        items = gather_all_smart_playlist_info(monitor=monitor)
+    else:
+        write_log(f"Playlist type undefined: {playlist_type}")
+        return None
+
     playlist_progress = playlist_builder(
         media_info=items,
         monitor=monitor,
         progress_queue=progress_queue,
         cancel_event=cancel_event,
+        chunk_by_size=chunk_by_size,
+        chunk_size=chunk_size,
+        number_of_chunks=number_of_chunks,
+
     )
 
     if playlist_progress:
         write_log("Playlist build complete")
+        return None
+
+    else:
+        write_log("Playlist build interrupted")
+        return None
 
 
 def run() -> None:
@@ -120,7 +156,19 @@ def main():
             clear_config_section("tvshow")
 
         if action == "review_selections":
-            review_selections()
+            addon = xbmcaddon.Addon()
+            playlist_type = int(addon.getSetting("playlist_type"))
+
+            if playlist_type == 0:
+                review_selections()
+            elif playlist_type == 1:
+                review_smart_playlist_selections()
+            else:
+                write_log(f"Playlist type undefined: {playlist_type}")
+
+
+        if action == "select_smart":
+            select_smart_playlists()
 
     else:
         run()

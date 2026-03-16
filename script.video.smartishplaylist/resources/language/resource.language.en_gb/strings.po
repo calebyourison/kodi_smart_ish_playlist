@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 
 
-# General Settings 32001-32050
+# General Settings 32001-32049
 msgctxt "#32001"
 msgid "General"
 msgstr ""
@@ -57,6 +57,19 @@ msgstr ""
 
 msgctxt "#32013"
 msgid "Current selections that will be used to a build a playlist"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Type"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Manual for playlist built through the menu, Smart for combination of smart playlists"
+msgstr ""
+
+# Manual Settings
+msgctxt "#32050"
+msgid "Manual"
 msgstr ""
 
 # Movies Settings 32051-32100
@@ -124,4 +137,46 @@ msgstr ""
 
 msgctxt "#32109"
 msgid "Clear all TV Show Selections"
+msgstr ""
+
+# Smart Settings 32151-32200
+msgctxt "#32151"
+msgid "Smart"
+msgstr ""
+
+msgctxt "#32152"
+msgid "Smart Playlists"
+msgstr ""
+
+msgctxt "#32153"
+msgid "Select Smart Playlists to combine"
+msgstr ""
+
+# Misc Settings 32201-32250
+msgctxt "#32201"
+msgid "Misc"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Batch Method"
+msgstr ""
+
+msgctxt "#32203"
+msgid "Create batches when adding to playlist by either number of items (Size) or number of groups (Group)"
+msgstr ""
+
+msgctxt "#32204"
+msgid "Batch Size"
+msgstr ""
+
+msgctxt "#32205"
+msgid "Number of items per batch (larger values result in fewer batches and fewer progress updates)"
+msgstr ""
+
+msgctxt "#32206"
+msgid "Number of Batches"
+msgstr ""
+
+msgctxt "#32207"
+msgid "Number of batches per media type (larger values result in fewer batches and fewer progress updates)"
 msgstr ""

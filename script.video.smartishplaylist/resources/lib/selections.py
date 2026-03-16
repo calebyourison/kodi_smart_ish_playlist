@@ -1,6 +1,8 @@
 import xbmcgui
 import json
 import xbmcaddon
+import xbmcvfs
+import xml.etree.ElementTree as ET
 
 from typing import Literal
 
@@ -8,7 +10,9 @@ from resources.lib.queries import (
     list_of_all_tv_shows,
     list_all_movies,
     list_of_episodes_by_show_id,
+    single_smart_playlist_info
 )
+from resources.lib.playlist_functions import gather_single_smart_playlist_media
 from resources.lib.logger import write_log
 from resources.lib.config import open_config_file, write_to_config
 
@@ -65,6 +69,32 @@ def media_titles_with_preselection_idx(
     return media_titles, preselected_idx
 
 
+def reconcile_titles(media_type:Literal["movie", "tvshow"], retrieved_info:list[dict], all_media_info:list[dict], selected_titles: list[str]) -> list[dict]:
+    """Reconcile existing selections with newly selected titles, implemented to preserve existing TV Show configs"""
+
+    selected_ids_titles: list[dict[str, str | int]] = [
+        {"id": item.get(f"{media_type}id"), "title": item.get("title")}
+        for item in all_media_info
+        if item.get("title") in selected_titles
+    ]
+
+    write_log(f"Selected {media_type} ids: {selected_ids_titles}")
+
+    existing_ids: list[int] = [item.get("id") for item in retrieved_info]
+    new_ids: list[int] = [item.get("id") for item in selected_ids_titles]
+
+    retained_items: list[dict] = [
+        item for item in retrieved_info if item.get("id") in new_ids
+    ]
+    new_items: list[dict] = [
+        item for item in selected_ids_titles if item.get("id") not in existing_ids
+    ]
+
+    updated_selections:list[dict] = retained_items + new_items
+
+    return updated_selections
+
+
 def select_media(media_type: Literal["movie", "tvshow"]) -> None:
     """Allow user to select titles from a window and save those selections to settings, check for previously select titles"""
 
@@ -99,26 +129,12 @@ def select_media(media_type: Literal["movie", "tvshow"]) -> None:
         selected_titles: list[str] = [titles[index] for index in choices]
         write_log(f"Selected {media_type} titles: {selected_titles}")
 
-        selected_ids_titles: list[dict[str, str | int]] = [
-            {"id": item.get(f"{media_type}id"), "title": item.get("title")}
-            for item in all_media_info
-            if item.get("title") in selected_titles
-        ]
-
-        write_log(f"Selected {media_type} ids: {selected_ids_titles}")
-
-        # Reconcile old/new titles to retain other settings
-        existing_ids: list[int] = [item.get("id") for item in retrieved_info]
-        new_ids: list[int] = [item.get("id") for item in selected_ids_titles]
-
-        retained_items: list[dict] = [
-            item for item in retrieved_info if item.get("id") in new_ids
-        ]
-        new_items: list[dict] = [
-            item for item in selected_ids_titles if item.get("id") not in existing_ids
-        ]
-
-        updated_selections = retained_items + new_items
+        updated_selections = reconcile_titles(
+            media_type=media_type,
+            retrieved_info=retrieved_info,
+            all_media_info=all_media_info,
+            selected_titles=selected_titles
+        )
 
         config_file[media_type] = updated_selections
 
@@ -128,10 +144,10 @@ def select_media(media_type: Literal["movie", "tvshow"]) -> None:
 
 
 def obtain_show_config(
-    tv_show_id: int, tv_show_title: str, shows_config: list[dict]
+    tv_show_id: int, tv_show_title: str, shows_config: list[dict], default_number_of_episodes: int
 ) -> tuple[int, list]:
     """Return a tuple of a show's current configuration or default values: number of episodes, excluded episodes"""
-    addon = xbmcaddon.Addon()
+
     possible_settings: list[dict] = [
         item for item in shows_config if item.get("id") == tv_show_id
     ]
@@ -143,9 +159,6 @@ def obtain_show_config(
         write_log(f"selected show settings are length {len(possible_settings)}")
         selected_show_settings = {}
 
-    default_number_of_episodes: int = json.loads(
-        addon.getSetting("default_number_of_episodes")
-    )
     # Default number of episodes unless previously specified
     number_of_episodes: int = selected_show_settings.get(
         "number_of_episodes", default_number_of_episodes
@@ -247,11 +260,14 @@ def update_shows_config(
 def configure_single_show(tv_show_id: int, tv_show_title: str) -> None:
     """Configuration for a given show"""
 
+    addon = xbmcaddon.Addon()
     window: xbmcgui.Dialog = xbmcgui.Dialog()
 
     while True:
         config: dict[str, list[dict]] = open_config_file()
         tv_shows_configurations: list[dict] = config.get("tvshow")
+        default_number_of_episodes: int = json.loads(addon.getSetting("default_number_of_episodes"))
+
         write_log(f"Retrieved all tv show settings: {tv_shows_configurations}")
 
         number_of_episodes: int
@@ -261,6 +277,7 @@ def configure_single_show(tv_show_id: int, tv_show_title: str) -> None:
             tv_show_id=tv_show_id,
             tv_show_title=tv_show_title,
             shows_config=tv_shows_configurations,
+            default_number_of_episodes=default_number_of_episodes
         )
 
         options = [
@@ -320,6 +337,7 @@ def configure_single_show(tv_show_id: int, tv_show_title: str) -> None:
 
 
 def configure_shows() -> None:
+    """Selection window to configure individual shows"""
     window = xbmcgui.Dialog()
 
     while True:
@@ -349,28 +367,117 @@ def configure_shows() -> None:
             configure_single_show(tv_show_id=int(tv_show_id), tv_show_title=title)
 
 
+def list_smart_playlists() -> list[dict[str, str]]:
+    """Return a list of smart playlist dictionaries, name, path keys """
+    smart_playlists = []
+    paths = ["special://profile/playlists/video/", "special://xbmc/system/playlists/video/"]
+
+    for path in paths:
+        dirs, files = xbmcvfs.listdir(path)
+        playlists = [f for f in files if f.endswith(".xsp")]
+        for playlist in playlists:
+            filepath = path + playlist
+
+            file = xbmcvfs.File(filepath)
+            xml_data = file.read()
+            file.close()
+
+            root = ET.fromstring(xml_data)
+            title = root.findtext("name")
+
+            smart_playlists.append({"title": title, "path": filepath})
+
+    write_log(f"Smart Playlists: {smart_playlists}")
+
+    return smart_playlists
+
+
+def select_smart_playlists() -> None:
+    """Selection window for smart playlists"""
+    config: dict[str, list] = open_config_file()
+
+    preselected_smart_playlists: list[dict[str,str]] = config.get("smart", [])
+    preselected_titles:list[str] = [playlist.get("title") for playlist in preselected_smart_playlists]
+
+    playlists:list[dict[str,str]] = list_smart_playlists()
+
+    available_titles:list[str] = sorted([playlist.get("title") for playlist in playlists])
+
+    preselected_idx:list[int] = [available_titles.index(title) for title in preselected_titles if title in available_titles]
+
+    choices: list[int] = xbmcgui.Dialog().multiselect(
+        "Select Smart Playlists", available_titles, preselect=preselected_idx
+    )
+
+    if choices:
+        selected_titles: list[str] = [available_titles[index] for index in choices]
+        latest_playlist_selection: list[dict[str,str]] = [playlist for playlist in playlists if playlist.get("title") in selected_titles]
+        write_log(f"Latest smart playlist selection: {latest_playlist_selection}")
+        config["smart"] = latest_playlist_selection
+        write_to_config(config)
+
+
+def review_manual_tv_show_selections(tv_show_config:list, default_number_of_episodes:int) -> tuple[int, str]:
+    """Calculate total number of expected episodes and produce user-friendly text for display"""
+    total_number_of_episodes = 0
+    shows_text = []
+    # {"id": 101, "title": "show_title", "number_of_episodes": 10, "exclusions": [{"id": 1001, "title": "episode_title"}]}
+    for show in tv_show_config:
+        show_id:int = show.get("id")
+        title:str = show.get("title")
+        number_of_episodes:int = show.get("number_of_episodes", default_number_of_episodes)
+        exclusions:list[dict] = show.get("exclusions", [])
+
+        # Account for shows with fewer number of episodes than the user defined/default selection number
+        excluded_ids:list[int] = [episode.get("id") for episode in exclusions]
+        total_episodes:list[dict] = list_of_episodes_by_show_id(show_id)
+        eligible_episodes = [episode for episode in total_episodes if episode.get("episodeid") not in excluded_ids]
+
+        if number_of_episodes > len(eligible_episodes):
+            number_of_episodes = len(eligible_episodes)
+
+        total_number_of_episodes += number_of_episodes
+
+        text = f"[{title}] [{number_of_episodes} episodes]\n"
+
+        if len(exclusions) > 0:
+            exclusion_text = "\n".join(f"        {episode.get('title')}" for episode in exclusions)
+            exclusion_text = f"    excluding:\n{exclusion_text}\n"
+            text = text + exclusion_text
+
+        shows_text.append(text)
+
+    shows_text = sorted(shows_text)
+
+    final_text = "\n".join(shows_text)
+
+    message = final_text if final_text else " "
+
+    return total_number_of_episodes, message
+
+
 def review_selections() -> None:
     """Provide a user-friendly display for all the media selections and defined criteria"""
     window = xbmcgui.Dialog()
     addon = xbmcaddon.Addon()
 
     while True:
-        selections = open_config_file()
+        selections: dict[str, list] = open_config_file()
 
         number_of_movies: int = json.loads(addon.getSetting("number_of_movies"))
         default_number_of_episodes: int = json.loads(
             addon.getSetting("default_number_of_episodes")
         )
 
-        tv_shows = selections.get("tvshow")
-        movies = selections.get("movie")
+        tv_shows:list = selections.get("tvshow")
+        movies:list = selections.get("movie")
 
-        total_episodes: int = sum(
-            [
-                show.get("number_of_episodes", default_number_of_episodes)
-                for show in tv_shows
-            ]
-        )
+        if number_of_movies >= len(movies):
+            number_of_movies = len(movies)
+
+        total_episodes:int
+        shows_text:str
+        total_episodes, shows_text = review_manual_tv_show_selections(tv_shows, default_number_of_episodes)
 
         choices = [f"Movies ({number_of_movies})", f"TV Shows ({total_episodes})"]
 
@@ -389,37 +496,57 @@ def review_selections() -> None:
 
             message = movie_text if movie_text else " "
 
+            heading = f"Movie selections ({number_of_movies} title(s) to be randomly selected from this list)"
+            if number_of_movies == len(movie_selection):
+                heading = f"Movie selections (all {number_of_movies} title(s) to be selected from this list)"
+
             window.textviewer(
-                heading=f"Movie selections ({number_of_movies} title(s) to be randomly selected from this list)",
+                heading=heading,
                 text=message,
             )
 
         # TV Shows
         elif choice == 1:
-            tv_show_selection = []
-
-            for show in tv_shows:
-                exclusions = "\n".join(
-                    f"        {episode.get('title')}"
-                    for episode in show.get("exclusions", [])
-                )
-
-                text = (
-                    f"[{show.get('title')}] "
-                    f"[{show.get('number_of_episodes', default_number_of_episodes)} episodes]\n"
-                    f"    excluding:\n{exclusions}\n"
-                )
-
-                tv_show_selection.append(text)
-
-            tv_show_selection = sorted(tv_show_selection)
-
-
-            shows_text = "\n".join(tv_show_selection)
-
-            message = shows_text if shows_text else " "
 
             window.textviewer(
                 heading=f"TV Show selections ({total_episodes} items in total)",
-                text=message,
+                text=shows_text,
             )
+
+
+def review_smart_playlist_selections() -> None:
+    """Provide a user-friendly display for media selections defined in smart playlists"""
+    window = xbmcgui.Dialog()
+
+    total_episodes = 0
+    total_movies = 0
+
+    playlist_text = []
+
+    selections: dict[str, list] = open_config_file()
+    playlists = selections.get("smart", [])
+    for playlist in playlists:
+        playlist_counts:dict[str,int] = {}
+        title = playlist.get("title")
+        path = playlist.get("path")
+
+        files = single_smart_playlist_info(path).get("result", {}).get("files", {})
+        playlist_episodes, playlist_movies = gather_single_smart_playlist_media(files)
+
+        playlist_counts["episodes"] = len(playlist_episodes)
+        playlist_counts["movies"] = len(playlist_movies)
+
+        total_movies += playlist_counts.get("movies")
+        total_episodes += playlist_counts.get("episodes")
+
+        text = f"[{title}] [{playlist_counts.get('movies')} movies {playlist_counts.get('episodes')} episodes]\n"
+
+        playlist_text.append(text)
+
+    playlist_text = sorted(playlist_text)
+
+    final_text = "\n".join(playlist_text)
+
+    message = final_text if final_text else " "
+
+    window.textviewer(heading=f"Smart Playlist selections ({total_episodes + total_movies}) items total", text=message)

@@ -24,6 +24,9 @@ def default_config_file() -> None:
             # {"id": 10, "title": "example_title"},
             # {"id": 101, "title": "show_title", "number_of_episodes": 10, "exclusions": [{"id": 1001, "title": "episode_title"}]}
         ],
+        "smart": [
+            # {"title": "example_title", "path": "example/path/playlist.xsp"},
+        ]
     }
 
     with xbmcvfs.File(config_file_path, "w") as file_path:
